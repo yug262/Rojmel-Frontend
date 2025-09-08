@@ -29,7 +29,8 @@ export default function Dashboard() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isExporting, setIsExporting] = useState(false);
-
+  const API_URL = process.env.REACT_APP_API_URL;
+    
     useEffect(() => {
         const fetchDashboardData = async () => {
             setIsLoading(true);
@@ -42,7 +43,7 @@ export default function Dashboard() {
             }
 
             try {
-                const url = new URL("http://127.0.0.1:8000/api/dashboard/");
+                const url = new URL(`${API_URL}/dashboard/`);
                 if (selected) url.searchParams.set("business", selected);
                 const response = await fetch(url, {
                     headers: {
@@ -121,11 +122,11 @@ export default function Dashboard() {
             const headers = { Authorization: `Bearer ${token}` };
 
             // Always fetch products for current selection (selected or all)
-            const prodUrl = new URL("http://127.0.0.1:8000/api/products/");
+            const prodUrl = new URL(`${API_URL}/products/`);
             if (selected) prodUrl.searchParams.set("business", selected);
 
             // Fetch all businesses to compute per-business order/return columns
-            const bizUrl = new URL("http://127.0.0.1:8000/api/businesses/");
+            const bizUrl = new URL(`${API_URL}/businesses/`);
 
             const [prodRes, bizRes] = await Promise.all([
                 fetch(prodUrl, { headers }),
@@ -136,8 +137,8 @@ export default function Dashboard() {
 
             // For each business, fetch orders and returns scoped to that business
             const perBusiness = await Promise.all((businesses || []).map(async (b) => {
-                const ordUrl = new URL("http://127.0.0.1:8000/api/orders/");
-                const retUrl = new URL("http://127.0.0.1:8000/api/returns/");
+                const ordUrl = new URL(`${API_URL}/orders/`);
+                const retUrl = new URL(`${API_URL}/returns/`);
                 ordUrl.searchParams.set("business", b.id);
                 retUrl.searchParams.set("business", b.id);
                 const [ordRes, retRes] = await Promise.all([
