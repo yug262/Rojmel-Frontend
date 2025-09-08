@@ -3,9 +3,11 @@ import { useBusiness } from "../contexts/BusinessContext";
 import { FaChartLine, FaSpinner, FaDownload, FaExclamationTriangle } from 'react-icons/fa';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
+ const API_URL = process.env.REACT_APP_API_URL;
+
 const InventoryAnalysis = ({
-  apiUrl = "http://127.0.0.1:8000/api/analysis/inventory-analysis/",
-  reportApiUrl = "http://127.0.0.1:8000/api/analysis/inventory-analysis-report/",
+  apiUrl = `${API_URL}/analysis/inventory-analysis/`,
+  reportApiUrl = `${API_URL}/analysis/inventory-analysis-report/`,
 }) => {
   const [data, setData] = useState({ low_stock_products: [], inventory_value: 0, stock_movement_data: [] });
   const [loading, setLoading] = useState(true);
