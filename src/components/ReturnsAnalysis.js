@@ -3,7 +3,9 @@ import { useBusiness } from "../contexts/BusinessContext";
 import { FaChartLine, FaChartBar, FaChartPie, FaSpinner, FaDownload, FaExclamationTriangle } from 'react-icons/fa';
 import { ResponsiveContainer, LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-const ReturnsAnalysis = ({ apiUrl = "http://127.0.0.1:8000/api/analysis/returns-analysis/", reportApiUrl = "http://127.0.0.1:8000/api/analysis/returns-analysis-report/" }) => {
+const API_URL = process.env.REACT_APP_API_URL;
+
+const ReturnsAnalysis = ({ apiUrl = `${API_URL}/analysis/returns-analysis/, reportApiUrl = `${API_URL}/analysis/returns-analysis-report/` }) => {
   const [data, setData] = useState({ line_data: [], bar_data: [], donut_data: [] });
   const [loading, setLoading] = useState(true);
   const { selected } = useBusiness();
