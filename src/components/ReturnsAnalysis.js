@@ -5,7 +5,7 @@ import { ResponsiveContainer, LineChart, Line, BarChart, Bar, PieChart, Pie, Cel
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const ReturnsAnalysis = ({ apiUrl = `${API_URL}/analysis/returns-analysis/, reportApiUrl = `${API_URL}/analysis/returns-analysis-report/` }) => {
+const ReturnsAnalysis = ({ apiUrl = `${API_URL}/analysis/returns-analysis/`, reportApiUrl = `${API_URL}/analysis/returns-analysis-report/` }) => {
   const [data, setData] = useState({ line_data: [], bar_data: [], donut_data: [] });
   const [loading, setLoading] = useState(true);
   const { selected } = useBusiness();
