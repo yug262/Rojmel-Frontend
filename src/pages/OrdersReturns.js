@@ -27,7 +27,8 @@ export default function OrdersReturns() {
   const [returnSearch, setReturnSearch] = useState("");
   const [debouncedOrderSearch, setDebouncedOrderSearch] = useState("");
   const [debouncedReturnSearch, setDebouncedReturnSearch] = useState("");
-
+  const API_URL = process.env.REACT_APP_API_URL;
+  
   // Debounce search inputs for smoother UX
   useEffect(() => {
     const t = setTimeout(() => setDebouncedOrderSearch(orderSearch), 300);
@@ -88,7 +89,7 @@ export default function OrdersReturns() {
   async function fetchOrders() {
     if (!token) return;
     try {
-      const url = new URL(`http://127.0.0.1:8000/api/orders/`);
+      const url = new URL(`${API_URL}/orders/`);
       // If searching, fetch across all dates; otherwise, scope to selected date
       if (!(debouncedOrderSearch || "").trim()) {
         url.searchParams.set('date', selectedDate);
@@ -112,7 +113,7 @@ export default function OrdersReturns() {
   async function fetchReturns() {
     if (!token) return;
     try {
-      const url = new URL(`http://127.0.0.1:8000/api/returns/`);
+      const url = new URL(`${API_URL}/returns/`);
       // If searching, fetch across all dates; otherwise, scope to selected date
       if (!(debouncedReturnSearch || "").trim()) {
         url.searchParams.set('date', selectedDate);
@@ -138,7 +139,7 @@ export default function OrdersReturns() {
   async function fetchProducts() {
     if (!token) return;
     try {
-      const url = new URL(`http://127.0.0.1:8000/api/products/`);
+      const url = new URL(`${API_URL}/products/`);
       if (selected) url.searchParams.set('business', selected);
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
       const text = await res.text();
@@ -213,7 +214,7 @@ export default function OrdersReturns() {
     }
 
     try {
-      let url = new URL("http://127.0.0.1:8000/api/orders/add/");
+      let url = new URL(`${API_URL}/orders/add/`);
       if (selected && selected !== 'all') url.searchParams.set('business', selected);
       const res = await fetch(url, {
         method: "POST",
@@ -263,7 +264,7 @@ export default function OrdersReturns() {
     const returnPayload = { order: order.id, quantity: order.quantity, date: selectedDate };
 
     try {
-      const url = new URL("http://127.0.0.1:8000/api/returns/add/");
+      const url = new URL(`${API_URL}/returns/add/`);
       if (selected && selected !== 'all') url.searchParams.set('business', selected);
       const res = await fetch(url, {
         method: "POST",
@@ -316,20 +317,20 @@ export default function OrdersReturns() {
 
     try {
       // Attempt 1: POST remove/<id>/
-      const url1 = new URL("http://127.0.0.1:8000/api/returns/remove/" + encodeURIComponent(returnId) + "/");
+      const url1 = new URL(`${API_URL}/returns/remove/` + encodeURIComponent(returnId) + "/");
       if (selected && selected !== 'all') url1.searchParams.set('business', selected);
       let res = await fetch(url1, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } });
 
       // Attempt 2: POST <id>/delete/
       if (res.status === 405) {
-        const url2 = new URL("http://127.0.0.1:8000/api/returns/" + encodeURIComponent(returnId) + "/delete/");
+        const url2 = new URL(`${API_URL}/returns/` + encodeURIComponent(returnId) + "/delete/");
         if (selected && selected !== 'all') url2.searchParams.set('business', selected);
         res = await fetch(url2, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } });
       }
 
       // Attempt 3: DELETE returns/?id=
       if (res.status === 405) {
-        const url3 = new URL("http://127.0.0.1:8000/api/returns/");
+        const url3 = new URL(`${API_URL}/returns/`);
         url3.searchParams.set('id', returnId);
         if (selected && selected !== 'all') url3.searchParams.set('business', selected);
         res = await fetch(url3, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
@@ -364,7 +365,7 @@ export default function OrdersReturns() {
         return;
       }
 
-      const res = await fetch(`http://127.0.0.1:8000/api/orders/${orderId}/delete/`, {
+      const res = await fetch(`${API_URL}/orders/${orderId}/delete/`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
