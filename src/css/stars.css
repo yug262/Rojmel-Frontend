@@ -1,0 +1,61 @@
+@keyframes star-fall {
+    from {
+        transform: translate(0, 0);
+    }
+    to {
+        transform: translate(-50vw, -100vh);
+    }
+}
+
+@keyframes star-rise {
+    from {
+        transform: translate(0, 0);
+    }
+    to {
+        transform: translate(50vw, 100vh);
+    }
+}
+
+.star {
+    position: absolute;
+    background: rgb(173, 173, 173);
+    border-radius: 50%;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.star-up {
+    animation-name: star-fall;
+}
+
+.star-down {
+    animation-name: star-rise;
+}
+
+.star-layer-1 {
+    width: 1.5px;
+    height: 1.5px;
+    opacity: 0.9;
+    animation-duration: 40s;
+}
+
+.star-layer-2 {
+    width: 2.5px;
+    height: 2.5px;
+    opacity: 0.6;
+    animation-duration: 80s;
+}
+
+.star-layer-3 {
+    width: 1px;
+    height: 1px;
+    opacity: 0.3;
+    animation-duration: 120s;
+}
+
+.star-layer-4 {
+    width: 4px;
+    height: 4px;
+    opacity: 1;
+    animation-duration: 30s;
+}

@@ -1,0 +1,69 @@
+/* Reset & base styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll/shift */
+  font-family: sans-serif;
+}
+
+/* Navbar container */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 60px;
+  background-color: transparent;
+  position: fixed; /* Stays at top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+/* Navbar logo/icon */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.navbar-logo img,
+.navbar-logo svg {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+/* Mobile menu toggle (if needed) */
+.navbar-toggle {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+  .navbar-toggle {
+    display: block; /* Show mobile icon */
+  }
+}
+
+
+@media (width<720px) {
+  .pages a{
+    display:none;
+  }
+}
+
+@media (width>720px) {
+  .theme-toggle{
+    right: 15px;;
+  }
+}

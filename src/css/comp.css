@@ -1,0 +1,29 @@
+.hero{
+    padding: 10%;
+}
+
+.comp{
+    border-radius: 16px;
+    transition: 0.3s;
+    padding: 7px;
+}
+
+.comp:hover{
+    transform: scale(1.01);
+}
+
+.comp:active{
+    transform: scale(1);
+}
+
+.btn{
+    transition: 0.3s;
+}
+
+.btn:hover{
+    transform: scale(1.02);
+}
+
+.btn:active{
+    transform: scale(1);
+}

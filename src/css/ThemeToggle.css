@@ -1,0 +1,88 @@
+/* General styling */
+body {
+  transition: background-color 0.3s, color 0.3s;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.dark-comp {
+  background-color: #181818;
+}
+
+.light-comp {
+  background-color: rgb(248, 248, 248);
+}
+
+.tag{
+  background-color: rgb(238, 238, 238);
+  width:max-content;
+  padding: 7px 15px;
+  border-radius: 15px;
+}
+
+.dark-tag{
+  background-color: rgb(33, 33, 33);
+  width:max-content;
+  padding-inline: 15px;
+  border-radius: 15px;
+}
+
+/* Dark mode styling */
+body.dark-mode {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Button styling */
+.theme-toggle-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+.icons {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.sun-icon, .moon-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  transition: opacity 0.3s ease;
+}
+
+.sun-icon {
+  color: #fdb813;
+}
+
+.moon-icon {
+  color: #c9c9c9;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Normal mode */
+.dark-image {
+  filter: none;
+  transition: filter 0.3s ease;
+}
+
+/* When dark mode is active */
+body.dark-mode .dark-image {
+  filter: invert(1) brightness(2);
+}
+

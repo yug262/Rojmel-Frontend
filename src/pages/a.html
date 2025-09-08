@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Parallax Star Background</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /*
+         * This CSS defines two animations: one for stars moving up (star-fall)
+         * and one for stars moving down (star-rise).
+         */
+        @keyframes star-fall {
+            from {
+                transform: translate(0, 0);
+            }
+            /* Stars move diagonally up and to the left */
+            to {
+                transform: translate(-50vw, -100vh);
+            }
+        }
+
+        @keyframes star-rise {
+            from {
+                transform: translate(0, 0);
+            }
+            /* Stars move diagonally down and to the right */
+            to {
+                transform: translate(50vw, 100vh);
+            }
+        }
+
+        /* Common class for all stars */
+        .star {
+            position: absolute;
+            background: rgb(173, 173, 173);
+            border-radius: 50%;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        
+        /* Apply the appropriate animation to stars based on direction */
+        .star-up {
+            animation-name: star-fall;
+        }
+
+        .star-down {
+            animation-name: star-rise;
+        }
+
+        /* Individual star layers with different sizes and speeds for parallax */
+        .star-layer-1 {
+            width: 1.5px;
+            height: 1.5px;
+            opacity: 0.9;
+            animation-duration: 40s;
+        }
+
+        .star-layer-2 {
+            width: 2.5px;
+            height: 2.5px;
+            opacity: 0.6;
+            animation-duration: 80s;
+        }
+
+        .star-layer-3 {
+            width: 1px;
+            height: 1px;
+            opacity: 0.3;
+            animation-duration: 120s;
+        }
+        
+        /* New layer for bigger, more prominent stars */
+        .star-layer-4 {
+            width: 4px;
+            height: 4px;
+            opacity: 1;
+            animation-duration: 30s;
+        }
+    </style>
+</head>
+<body class="bg-gray-950 font-inter text-white">
+    <main class="w-full min-h-screen flex items-center justify-center relative overflow-hidden">
+        <!-- Main container for the animated background layers -->
+        <div class="absolute inset-0">
+            <!-- Dynamically generated stars -->
+            <script>
+                // This script generates the star elements for a more robust effect.
+                const container = document.querySelector('main');
+                const numStars = 1000;
+
+                for (let i = 0; i < numStars; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    
+                    // Randomly decide the direction for the star
+                    const direction = Math.random() < 0.5 ? 'up' : 'down';
+                    if (direction === 'up') {
+                        star.classList.add('star-up');
+                    } else {
+                        star.classList.add('star-down');
+                    }
+
+                    // Assign a random layer class, with a higher chance for smaller stars
+                    const layerChance = Math.random();
+                    let layer = 3; // default to the smallest stars
+                    if (layerChance < 0.1) {
+                        layer = 4; // 10% chance for the biggest stars
+                    } else if (layerChance < 0.4) {
+                        layer = 1; // 30% chance for the mid-size stars
+                    } else if (layerChance < 0.7) {
+                        layer = 2; // 30% chance for the other mid-size stars
+                    } else {
+                        layer = 3; // 30% chance for the smallest stars
+                    }
+                    
+                    star.classList.add(`star-layer-${layer}`);
+
+                    // Randomize position and animation delay for a scattered effect
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    // Updated the delay values to match the new animation durations
+                    const delay = Math.random() * (
+                        layer === 4 ? 30 : layer === 1 ? 40 : layer === 2 ? 80 : 120
+                    );
+
+                    star.style.left = `${x}vw`;
+                    star.style.top = `${y}vh`;
+                    star.style.animationDelay = `-${delay}s`;
+
+                    container.appendChild(star);
+                }
+            </script>
+        </div>
+
+        <!-- Content for the user to see, with a higher z-index -->
+    </main>
+</body>
+</html>

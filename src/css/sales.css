@@ -1,0 +1,16 @@
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.sales{
+    background-color: rgb(27, 27, 27);
+    border-radius: 12px;
+}
+
+input{
+    color: white;
+    border: 0px;
+    background-color: rgb(27, 27, 27);
+}
