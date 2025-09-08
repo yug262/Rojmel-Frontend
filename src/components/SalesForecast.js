@@ -7,7 +7,7 @@ const SalesForecast = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState('');
-
+ const API_URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem('access_token');
@@ -20,7 +20,7 @@ const SalesForecast = () => {
       setLoading(true);
       setError(null);
       setMessage('');
-      const apiUrl = 'http://127.0.0.1:8000/api/sales-forecast/';
+      const apiUrl = `${API_URL}/sales-forecast/`;
 
       try {
         const response = await fetch(apiUrl, {
@@ -140,3 +140,4 @@ const SalesForecast = () => {
 };
 
 export default SalesForecast;
+
