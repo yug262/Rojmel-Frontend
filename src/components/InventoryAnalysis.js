@@ -5,10 +5,6 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
 
  const API_URL = process.env.REACT_APP_API_URL;
 
-const InventoryAnalysis = ({
-  apiUrl = `${API_URL}/analysis/inventory-analysis/`,
-  reportApiUrl = `${API_URL}/analysis/inventory-analysis-report/`,
-}) => {
   const [data, setData] = useState({ low_stock_products: [], inventory_value: 0, stock_movement_data: [] });
   const [loading, setLoading] = useState(true);
   const { selected } = useBusiness();
