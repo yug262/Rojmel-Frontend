@@ -31,7 +31,8 @@ export default function Products() {
     const [editProduct, setEditProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const { selected } = useBusiness();
-
+    const API_URL = process.env.REACT_APP_API_URL;
+    
     useEffect(() => {
         fetchProducts();
     }, []);
@@ -41,7 +42,7 @@ export default function Products() {
         if (!accessToken) return;
 
         try {
-            const url = new URL("http://127.0.0.1:8000/api/products/");
+            const url = new URL(`${API_URL}/products/`);
             if (selected) url.searchParams.set("business", selected);
             const response = await fetch(url, {
                 headers: { Authorization: `Bearer ${accessToken}` },
@@ -171,7 +172,7 @@ export default function Products() {
         if (window.confirm("Are you sure you want to delete this product?")) {
             try {
                 const response = await fetch(
-                    `http://127.0.0.1:8000/api/products/delete/${sku}/`,
+                    `${API_URL}/products/delete/${sku}/`,
                     {
                         method: "DELETE",
                         headers: { Authorization: `Bearer ${accessToken}` },
@@ -215,13 +216,13 @@ export default function Products() {
             // 🟢 CORRECTED: Use the new, correct URL for edits
             let url;
             if (isEdit) {
-                url = `http://127.0.0.1:8000/api/products/${editProduct.id}/`;
+                url = `${API_URL}/products/${editProduct.id}/`;
             } else {
                 if (selected === 'all') {
                     alert('Please select a specific business (not All) to add a product.');
                     return;
                 }
-                const u = new URL("http://127.0.0.1:8000/api/products/");
+                const u = new URL(`${API_URL}/products/`);
                 if (selected) u.searchParams.set('business', selected);
                 url = u.toString();
             }
