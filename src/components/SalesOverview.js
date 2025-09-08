@@ -3,8 +3,10 @@ import { useBusiness } from "../contexts/BusinessContext";
 import { FaChartLine, FaChartBar, FaChartPie, FaExclamationTriangle, FaSpinner, FaDownload } from 'react-icons/fa';
 import { ResponsiveContainer, LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 // This component fetches and displays charts and data for sales overview.
-const SalesOverview = ({ apiUrl = "http://127.0.0.1:8000/api/analysis/sales-overview/", reportApiUrl = "http://127.00.1:8000/api/analysis/sales-overview-report/" }) => {
+const SalesOverview = ({ apiUrl = `${API_URL}/analysis/sales-overview/`, reportApiUrl = `${API_URL}/analysis/sales-overview-report/` }) => {
   const [data, setData] = useState({ line_data: [], bar_data: [], pie_data: [] });
   const [loading, setLoading] = useState(true);
   const { selected } = useBusiness();
