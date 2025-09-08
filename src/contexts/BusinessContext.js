@@ -10,12 +10,13 @@ const BusinessContext = createContext({
 export const BusinessProvider = ({ children }) => {
   const [businesses, setBusinesses] = useState([]);
   const [selected, setSelected] = useState(() => localStorage.getItem("business_selected") || "all");
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const fetchBusinesses = async () => {
     const token = localStorage.getItem("access_token");
     if (!token) return;
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/businesses/", {
+      const res = await fetch(`${API_URL}/businesses/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) return;
