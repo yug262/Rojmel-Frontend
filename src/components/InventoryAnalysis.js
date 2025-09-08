@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useBusiness } from "../contexts/BusinessContext";
-import { FaChartLine, FaSpinner, FaDownload, FaExclamationTriangle } from 'react-icons/fa';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { FaChartLine, FaSpinner, FaDownload, FaExclamationTriangle } from "react-icons/fa";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 
- const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;
+const REPORT_API_URL = process.env.REACT_APP_REPORT_API_URL;
 
+const InventoryAnalysis = () => {
   const [data, setData] = useState({ low_stock_products: [], inventory_value: 0, stock_movement_data: [] });
   const [loading, setLoading] = useState(true);
   const { selected } = useBusiness();
@@ -14,6 +16,7 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
+  // Fetch Data
   const fetchData = useCallback(async () => {
     const token = localStorage.getItem("access_token");
     if (!token) {
@@ -26,11 +29,11 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
     setLoading(true);
     setError(null);
 
-    let fetchUrl = apiUrl;
+    let fetchUrl = API_URL;
     if (startDate && endDate) {
-      fetchUrl = `${apiUrl}?start_date=${startDate}&end_date=${endDate}`;
+      fetchUrl = `${API_URL}?start_date=${startDate}&end_date=${endDate}`;
     }
-    // append business
+
     const urlObj = new URL(fetchUrl);
     if (selected) urlObj.searchParams.set("business", selected);
     fetchUrl = urlObj.toString();
@@ -53,35 +56,34 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
     } finally {
       setLoading(false);
     }
-  }, [apiUrl, startDate, endDate, selected]);
+  }, [API_URL, startDate, endDate, selected]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
+  // Download Report
   const handleDownload = async () => {
-    setIsDownloading(true);
-    let downloadUrl = reportApiUrl;
-    if (startDate && endDate) {
-      downloadUrl = `${reportApiUrl}?start_date=${startDate}&end_date=${endDate}`;
-    }
-    const dUrl = new URL(downloadUrl);
-    if (selected) dUrl.searchParams.set("business", selected);
-    downloadUrl = dUrl.toString();
     const token = localStorage.getItem("access_token");
-
     if (!token) {
       alert("Authentication token not found. Please log in.");
-      setIsDownloading(false);
       return;
     }
 
+    setIsDownloading(true);
+
+    let downloadUrl = REPORT_API_URL;
+    if (startDate && endDate) {
+      downloadUrl = `${REPORT_API_URL}?start_date=${startDate}&end_date=${endDate}`;
+    }
+
+    const urlObj = new URL(downloadUrl);
+    if (selected) urlObj.searchParams.set("business", selected);
+    downloadUrl = urlObj.toString();
+
     try {
       const response = await fetch(downloadUrl, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!response.ok) {
@@ -90,22 +92,17 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
 
       const disposition = response.headers.get("Content-Disposition");
       const filenameMatch = disposition && disposition.match(/filename="(.+)"/);
-      const filename =
-        filenameMatch && filenameMatch[1]
-          ? filenameMatch[1]
-          : `inventory_analysis_report_${Date.now()}.csv`;
+      const filename = filenameMatch?.[1] || `inventory_analysis_report_${Date.now()}.csv`;
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-
       const a = document.createElement("a");
       a.href = url;
       a.download = filename;
       document.body.appendChild(a);
       a.click();
-
-      window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
     } catch (e) {
       console.error("Download failed:", e);
       alert(`Failed to download report: ${e.message}`);
@@ -121,10 +118,11 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
       </div>
     );
   }
-  
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen font-sans">
       <div className="max-w-7xl mx-auto space-y-8">
+
         {/* Header and Controls */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <h1 className="text-3xl font-bold text-gray-800">Inventory Analysis</h1>
@@ -135,21 +133,21 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
               <button onClick={fetchData} className="px-4 py-2 bg-blue-600 text-white rounded-md">Apply</button>
             </div>
             <button
-                onClick={handleDownload}
-                className="flex items-center px-4 py-2 text-sm rounded-md bg-green-500 text-white shadow-md hover:bg-green-600 transition-colors duration-200"
-                disabled={isDownloading}
+              onClick={handleDownload}
+              className="flex items-center px-4 py-2 text-sm rounded-md bg-green-500 text-white shadow-md hover:bg-green-600 transition-colors duration-200"
+              disabled={isDownloading}
             >
-                {isDownloading ? (
-                  <>
-                    <FaSpinner className="animate-spin mr-2" />
-                    Downloading...
-                  </>
-                ) : (
-                  <>
-                    <FaDownload className="mr-2" />
-                    Download Report
-                  </>
-                )}
+              {isDownloading ? (
+                <>
+                  <FaSpinner className="animate-spin mr-2" />
+                  Downloading...
+                </>
+              ) : (
+                <>
+                  <FaDownload className="mr-2" />
+                  Download Report
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -161,19 +159,18 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
             <p className="text-gray-600">Loading analysis data...</p>
           </div>
         )}
+
         {error && !loading && (
           <div className="flex items-center justify-center p-8 bg-red-50 rounded-xl shadow-md">
             <FaExclamationTriangle className="text-red-500 mr-4 text-2xl" />
-            <p className="text-red-700 font-medium">
-              Error fetching data: {error}
-            </p>
+            <p className="text-red-700 font-medium">Error fetching data: {error}</p>
           </div>
         )}
 
         {!loading && !error && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-            {/* Current Inventory Value */}
+            {/* Inventory Value */}
             <div className="bg-white rounded-xl shadow-md p-6">
               <h3 className="text-lg font-semibold text-gray-800 mb-2">Current Inventory Value</h3>
               <p className="text-4xl font-bold text-blue-600">
@@ -202,9 +199,7 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
             {/* Stock Movement Trend */}
             <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  Total Stock Movement Trend
-                </h3>
+                <h3 className="text-lg font-semibold text-gray-800">Total Stock Movement Trend</h3>
                 <FaChartLine className="text-green-500 text-xl" />
               </div>
               <div className="h-80">
@@ -222,6 +217,7 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
 
           </div>
         )}
+
       </div>
     </div>
   );
