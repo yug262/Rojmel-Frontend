@@ -11,7 +11,12 @@ export default function Navbar() {
   const { businesses, selected, setSelected, refresh } = useBusiness();
   const [showAddModal, setShowAddModal] = useState(false);
   const [newBiz, setNewBiz] = useState({ business_name: '', business_type: '', contact_number: '', gst_tax_id: '', business_address: '', department_branch: '', copy_from_business: '' });
+  const API_URL = process.env.REACT_APP_API_URL;
 
+const InventoryAnalysis = ({
+  apiUrl = `${API_URL}/analysis/inventory-analysis/`,
+  reportApiUrl = `${API_URL}/analysis/inventory-analysis-report/`,
+}) => {
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
@@ -19,7 +24,7 @@ export default function Navbar() {
   const handleLogout = () => {
     const refresh = localStorage.getItem("refresh_token");
 
-    fetch("http://127.0.0.1:8000/api/logout/", {
+    fetch(`${API_URL}/logout/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: refresh }),
@@ -38,7 +43,7 @@ export default function Navbar() {
     const token = localStorage.getItem('access_token');
     if (!token) return;
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/businesses/add/', {
+      const res = await fetch(`${API_URL}/businesses/add/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(newBiz),
