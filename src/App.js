@@ -11,9 +11,10 @@ import { BusinessProvider } from "./contexts/BusinessContext";
 
 function App() {
   const [message, setMessage] = useState("");
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/test/")
+    fetch(`${API_URL}/test/`)
       .then((res) => res.json())
       .then((data) => setMessage(data.message))
       .catch((err) => console.error("Error fetching data:", err));
