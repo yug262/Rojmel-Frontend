@@ -2,9 +2,11 @@ import React, { useEffect, useState, useCallback } from "react";
 import { FaChartLine, FaChartBar, FaSpinner, FaDownload, FaExclamationTriangle } from 'react-icons/fa';
 import { ResponsiveContainer, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const RevenueProfitAnalysis = ({
-  apiUrl = "http://127.0.0.1:8000/api/analysis/revenue-profit-analysis/",
-  reportApiUrl = "http://127.0.0.1:8000/api/analysis/revenue-profit-analysis-report/",
+  apiUrl = `${API_URL}/analysis/revenue-profit-analysis/`,
+  reportApiUrl = `${API_URL}/analysis/revenue-profit-analysis-report/`,
 }) => {
   const [data, setData] = useState({ revenue_cost_data: [], revenue_growth_data: [], profit_category_data: [] });
   const [loading, setLoading] = useState(true);
